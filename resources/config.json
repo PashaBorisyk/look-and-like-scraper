@@ -1,0 +1,31 @@
+{
+  "scraperConfig": {
+    "locales": {
+      "zara": [
+        {
+          "baseURL": "https://www.zara.com/by/ru/",
+          "alpha3Code": "BLR",
+          "localeLCID": "be",
+          "femaleTranslation": "женщ",
+          "maleTranslation": "муж",
+          "kidsTranslation": "дети"
+        }
+      ],
+      "h&m": [
+        {
+          "baseURL": "https://www2.hm.com/ru_ru/index.html",
+          "alpha3Code": "RUS",
+          "localeLCID": "ru",
+          "femaleTranslation": "женщ",
+          "maleTranslation": "муж",
+          "kidsTranslation": "дети"
+        }
+      ]
+    }
+  },
+  "mongoConfig": {
+    "uri": "",
+    "productsDatabaseName": "look-and-like-test",
+    "collyDatabaseName" : "colly"
+  }
+}

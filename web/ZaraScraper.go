@@ -5,6 +5,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly"
 	"log"
+	"look-and-like-web-scrapper/config"
 	"look-and-like-web-scrapper/db"
 	"look-and-like-web-scrapper/models"
 	"strconv"
@@ -13,7 +14,7 @@ import (
 )
 
 const zaraDomain = "www.zara.com"
-const zaraShopName = "Zara"
+const zaraShopName = "zara"
 
 type ZaraScraper struct {
 	Scraper
@@ -22,9 +23,9 @@ type ZaraScraper struct {
 	productPageCollector  *colly.Collector
 }
 
-func NewZaraScrapper(locales []Locale) *ZaraScraper {
+func NewZaraScrapper() *ZaraScraper {
 	scrapper := ZaraScraper{}
-	scrapper.Locales = locales
+	scrapper.Locales = config.GetConfig().ScraperConfig.Locales[zaraShopName]
 	return &scrapper
 }
 

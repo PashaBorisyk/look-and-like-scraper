@@ -3,6 +3,7 @@ package web
 import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/zolamk/colly-mongo-storage/colly/mongo"
+	"look-and-like-web-scrapper/config"
 	"look-and-like-web-scrapper/models"
 	"strings"
 )
@@ -11,18 +12,9 @@ const UserAgent = "look-and-like-scrapper"
 
 var storage *mongo.Storage
 
-type Locale struct {
-	LocaleLCID        string
-	Alpha3Code        string
-	BaseURL           string
-	MaleTranslation   string
-	FemaleTranslation string
-	KidsTranslation   string
-}
-
 type Scraper struct {
-	Locales       []Locale
-	CurrentLocale Locale
+	Locales       []config.Locale
+	CurrentLocale config.Locale
 	Category      string
 	Sex           string
 }
@@ -33,8 +25,8 @@ func init() {
 
 func configureStorage() {
 	storage = &mongo.Storage{
-		Database: "colly",
-		URI:      "mongodb://127.0.0.1:27017",
+		Database: config.GetConfig().MongoConfig.CollyDatabaseName,
+		URI:      config.GetConfig().MongoConfig.Uri,
 	}
 }
 

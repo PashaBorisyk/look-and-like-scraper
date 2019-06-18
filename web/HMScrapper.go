@@ -6,6 +6,7 @@ import (
 	"github.com/gocolly/colly"
 	"github.com/mantyr/pricer"
 	"log"
+	"look-and-like-web-scrapper/config"
 	"look-and-like-web-scrapper/db"
 	"look-and-like-web-scrapper/models"
 	"regexp"
@@ -13,8 +14,8 @@ import (
 	"time"
 )
 
-const HMDomain = "www2.hm.com"
-const HMShopName = "H&M"
+const hmDomain = "www2.hm.com"
+const hmShopName = "h&m"
 
 const filterPagination = "?sort=stock&image-size=small&image=model&offset=0&page-size=10000"
 const imagePrefixLen = len("'image': isDesktop ? '")
@@ -38,9 +39,9 @@ func init() {
 
 }
 
-func NewHMScraper(locales []Locale) *HMScraper {
+func NewHMScraper() *HMScraper {
 	scrapper := HMScraper{}
-	scrapper.Locales = locales
+	scrapper.Locales = config.GetConfig().ScraperConfig.Locales[hmShopName]
 	return &scrapper
 }
 
@@ -69,7 +70,7 @@ func (scraper *HMScraper) configureMainPageCollector() {
 	log.Println("Configuring MainPageCollector")
 
 	scraper.mainPageCollector = colly.NewCollector(
-		colly.AllowedDomains(HMDomain),
+		colly.AllowedDomains(hmDomain),
 		colly.UserAgent(UserAgent),
 		colly.AllowURLRevisit(),
 	)
@@ -103,7 +104,7 @@ func (scraper *HMScraper) configureProductListCollector() {
 	log.Println("Configuring ProductListCollector")
 
 	scraper.productsListCollector = colly.NewCollector(
-		colly.AllowedDomains(HMDomain),
+		colly.AllowedDomains(hmDomain),
 		colly.UserAgent(UserAgent),
 		colly.AllowURLRevisit(),
 	)
@@ -124,7 +125,7 @@ func (scraper *HMScraper) configureProductPageCollector() {
 	productsCollection := db.GetCollection("products")
 
 	scraper.productPageCollector = colly.NewCollector(
-		colly.AllowedDomains(HMDomain),
+		colly.AllowedDomains(hmDomain),
 		colly.UserAgent(UserAgent),
 	)
 
@@ -158,11 +159,11 @@ func (scraper *HMScraper) createProduct(element *colly.HTMLElement) *models.Prod
 	metaInformation := models.MetaInformation{
 		Url:        productUrl,
 		InsertDate: time.Now(),
-		ShopName:   HMShopName,
+		ShopName:   hmShopName,
 		BaseURL:    scraper.CurrentLocale.BaseURL,
 		Alpha3Code: scraper.CurrentLocale.Alpha3Code,
 		LocaleLCID: scraper.CurrentLocale.LocaleLCID,
-		Domain:     HMDomain,
+		Domain:     hmDomain,
 	}
 
 	price := models.Price{

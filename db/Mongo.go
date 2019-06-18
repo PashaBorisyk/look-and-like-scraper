@@ -18,8 +18,8 @@ type Collection struct {
 
 func init() {
 
-	mongoUri := "mongodb://localhost:27017"
-	productDatabaseName := "look-and-like"
+	mongoUri := "mongodb://look-and-like-test:unE8DZr3T7yA6SLDPjknaT8Bj0MzLD4O4604EDq0OE44Lv9BxAslwWXTqLvJFzvqLCBoCDshGgUUJuKoahpT6w==@look-and-like-test.documents.azure.com:10255/?ssl=true&replicaSet=globaldb"
+	productDatabaseName := "look-and-like-test"
 
 	client, err := mongo.NewClient(options.Client().ApplyURI(mongoUri))
 	if err != nil {
