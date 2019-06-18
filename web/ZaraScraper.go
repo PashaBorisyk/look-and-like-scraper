@@ -12,8 +12,8 @@ import (
 	"time"
 )
 
-const ZaraDomain = "www.zara.com"
-const ZaraShopName = "Zara"
+const zaraDomain = "www.zara.com"
+const zaraShopName = "Zara"
 
 type ZaraScraper struct {
 	Scraper
@@ -52,7 +52,7 @@ func (scraper *ZaraScraper) Scrap() {
 func (scraper *ZaraScraper) configureMainPageCollector() {
 
 	scraper.mainPageCollector = colly.NewCollector(
-		colly.AllowedDomains(ZaraDomain),
+		colly.AllowedDomains(zaraDomain),
 		colly.UserAgent(UserAgent),
 		colly.AllowURLRevisit(),
 	)
@@ -77,7 +77,7 @@ func (scraper *ZaraScraper) configureMainPageCollector() {
 func (scraper *ZaraScraper) configureProductsListCollector() {
 
 	scraper.productsListCollector = colly.NewCollector(
-		colly.AllowedDomains(ZaraDomain),
+		colly.AllowedDomains(zaraDomain),
 		colly.UserAgent(UserAgent),
 		colly.AllowURLRevisit(),
 	)
@@ -97,7 +97,7 @@ func (scraper *ZaraScraper) configureProductPageCollector() {
 	productsCollection := db.GetCollection("products")
 
 	scraper.productPageCollector = colly.NewCollector(
-		colly.AllowedDomains(ZaraDomain),
+		colly.AllowedDomains(zaraDomain),
 		colly.UserAgent(UserAgent),
 	)
 	if err := scraper.productPageCollector.SetStorage(storage); err != nil {
@@ -111,7 +111,7 @@ func (scraper *ZaraScraper) configureProductPageCollector() {
 		if err != nil {
 			log.Println("Error while inserting Zara product in database: ", err)
 		} else {
-			log.Println("Zara product with url:' ", product.Url, "' inserted")
+			log.Println("Zara product with url:' ", product.MetaInformation.Url, "' inserted")
 		}
 
 	})
@@ -123,29 +123,46 @@ func (scraper *ZaraScraper) createProduct(element *colly.HTMLElement) *models.Pr
 	productUrl := scraper.getProductUrl(element)
 	productName := scraper.getProductName(element)
 	productColor, productArticle := scraper.getColorAndArticle(element)
-	productPrice, productPriceCurrency := scraper.getProductPrice(element)
+	productPriceValue, productPriceCurrency := scraper.getProductPrice(element)
 	productDescription := scraper.getProductDescription(element)
 	productImages := scraper.getProductImages(element)
 	productSizes := scraper.getProductSizes(element)
 
+	metaInformation := models.MetaInformation{
+		Url:        productUrl,
+		InsertDate: time.Now(),
+		ShopName:   zaraShopName,
+		BaseURL:    scraper.CurrentLocale.BaseURL,
+		Alpha3Code: scraper.CurrentLocale.Alpha3Code,
+		LocaleLCID: scraper.CurrentLocale.LocaleLCID,
+		Domain:     zaraDomain,
+	}
+
+	price := models.Price{
+		Value:    productPriceValue,
+		Currency: productPriceCurrency,
+	}
+
+	images := models.Images{
+		StockImageUrls:productImages,
+	}
+
+	data := models.Data{
+		Images: images,
+		Price:price,
+		Sex:scraper.Sex,
+		Category:scraper.Category,
+		Color:productColor,
+		Name:productName,
+		Article:productArticle,
+		Sizes:productSizes,
+		Description:normalizeString(productDescription),
+
+	}
+
 	return &models.Product{
-		ShopName:    ZaraShopName,
-		Domain:      ZaraDomain,
-		Alpha3Code:  scraper.CurrentLocale.Alpha3Code,
-		LocaleLCID:  scraper.CurrentLocale.LocaleLCID,
-		BaseURL:     scraper.CurrentLocale.BaseURL,
-		Url:         productUrl,
-		Name:        normalizeString(productName),
-		Color:       normalizeString(productColor),
-		Sizes:       productSizes,
-		Article:     normalizeString(productArticle),
-		Sex:         normalizeString(scraper.Sex),
-		Category:    normalizeString(scraper.Category),
-		Currency:    productPriceCurrency,
-		Price:       productPrice,
-		Description: normalizeString(productDescription),
-		Images:      productImages,
-		InsertDate:  time.Now(),
+		Data:data,
+		MetaInformation:metaInformation,
 	}
 }
 
@@ -159,7 +176,7 @@ func (scraper ZaraScraper) getProductName(element *colly.HTMLElement) string {
 }
 
 func (scraper ZaraScraper) getProductDescription(element *colly.HTMLElement) string {
-	return element.DOM.Find("p.description").Text()
+	return normalizeString(element.DOM.Find("p.description").Text())
 }
 
 func (scraper ZaraScraper) getColorAndArticle(element *colly.HTMLElement) (color string, article string) {
@@ -208,7 +225,7 @@ func (scraper ZaraScraper) getProductSizes(element *colly.HTMLElement) (sizes []
 	sizesContainers := element.DOM.Find("span.size-name")
 	sizes = make([]string, sizesContainers.Size())
 	foreachSelection(sizesContainers, func(i int, sizesContainer *goquery.Selection) {
-		sizes[i] = sizesContainer.Text()
+		sizes[i] = normalizeString(sizesContainer.Text())
 	})
 
 	return sizes

@@ -138,7 +138,7 @@ func (scraper *HMScraper) configureProductPageCollector() {
 		if err != nil {
 			log.Println("Error inserting H&M product in database: ", err)
 		} else {
-			log.Println("H&M product with url:' ", product.Url, "' inserted")
+			log.Println("H&M product with url:' ", product.MetaInformation.Url, "' inserted")
 		}
 	})
 
@@ -146,34 +146,56 @@ func (scraper *HMScraper) configureProductPageCollector() {
 
 func (scraper *HMScraper) createProduct(element *colly.HTMLElement) *models.Product {
 
+	productUrl := scraper.getProductUrl(element)
 	productName := scraper.getProductName(element)
-	productPrice, productPriceCurrency := scraper.getProductPriceAndCurrency(element)
+	productPriceValue, productPriceCurrency := scraper.getProductPriceAndCurrency(element)
 	productColor, productArticle := scraper.getProductColorAndArticle(element)
 	productImages := scraper.getProductImages(element)
 	productDescription := scraper.getProductDescription(element)
 	productComposition := scraper.getProductComposition(element)
 	productSizes := scraper.getSizes(element)
 
-	return &models.Product{
-		Name:        normalizeString(productName),
-		Price:       productPrice,
-		Currency:    productPriceCurrency,
-		Color:       normalizeString(productColor),
-		Article:     normalizeString(productArticle),
-		Images:      productImages,
+	metaInformation := models.MetaInformation{
+		Url:        productUrl,
+		InsertDate: time.Now(),
+		ShopName:   HMShopName,
+		BaseURL:    scraper.CurrentLocale.BaseURL,
+		Alpha3Code: scraper.CurrentLocale.Alpha3Code,
+		LocaleLCID: scraper.CurrentLocale.LocaleLCID,
+		Domain:     HMDomain,
+	}
+
+	price := models.Price{
+		Value:    productPriceValue,
+		Currency: productPriceCurrency,
+	}
+
+	images := models.Images{
+		StockImageUrls: productImages,
+	}
+
+	data := models.Data{
+		Images:      images,
+		Price:       price,
+		Sex:         scraper.Sex,
+		Category:    scraper.Category,
+		Color:       productColor,
+		Name:        productName,
+		Article:     productArticle,
+		Sizes:       productSizes,
 		Description: normalizeString(productDescription),
 		Composition: productComposition,
-		InsertDate:  time.Now(),
-		Sizes:       productSizes,
-		Category:    normalizeString(scraper.Category),
-		Sex:         scraper.Sex,
-		Domain:      HMDomain,
-		ShopName:    HMShopName,
-		LocaleLCID:  scraper.CurrentLocale.LocaleLCID,
-		Alpha3Code:  scraper.CurrentLocale.Alpha3Code,
-		BaseURL:     scraper.CurrentLocale.BaseURL,
-		Url:         element.Request.URL.String(),
 	}
+
+	return &models.Product{
+		Data:            data,
+		MetaInformation: metaInformation,
+	}
+
+}
+
+func (scraper *HMScraper) getProductUrl(element *colly.HTMLElement) string {
+	return element.Request.URL.String()
 }
 
 func (scraper *HMScraper) getProductName(element *colly.HTMLElement) string {

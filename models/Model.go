@@ -4,31 +4,48 @@ import (
 	"time"
 )
 
-type Product struct {
-	Domain      string        `json:"domain" bson:"domain"`
-	LocaleLCID  string        `json:"localeLCID" bson:"localeLCID"`
-	Alpha3Code  string        `json:"alpha3Code" bson:"alpha3Code"`
-	ShopName    string        `json:"shopName" bson:"shopName"`
-	BaseURL     string        `json:"baseURL" bson:"baseURL"`
-	Url         string        `json:"url" bson:"url"`
-	Name        string        `json:"name" bson:"name"`
-	Color       string        `json:"color" bson:"color"`
-	Sizes       []string      `json:"sizes" bson:"sizes"`
-	Price       float64       `json:"price" bson:"price"`
-	Currency    string        `json:"currency" bson:"currency"`
-	Description string        `json:"description" bson:"description"`
-	Article     string        `json:"article" bson:"article"`
-	Images      []string      `json:"images" bson:"images"`
-	InsertDate  time.Time     `json:"insertDate" bson:"insertDate"`
-	Category    string        `json:"category" bson:"category"`
-	Sex         string        `json:"sex" bson:"sex"`
-	Composition []Composition `json:"composition" bson:"composition"`
+type MetaInformation struct {
+	Domain     string    `json:"domain" bson:"domain"`
+	LocaleLCID string    `json:"localeLCID" bson:"localeLCID"`
+	Alpha3Code string    `json:"alpha3Code" bson:"alpha3Code"`
+	ShopName   string    `json:"shopName" bson:"shopName"`
+	BaseURL    string    `json:"baseURL" bson:"baseURL"`
+	Url        string    `json:"url" bson:"url"`
+	InsertDate time.Time `json:"insertDate" bson:"insertDate"`
+}
+
+type Price struct {
+	Value    float64 `json:"price" bson:"price"`
+	Currency string  `json:"currency" bson:"currency"`
+}
+
+type Images struct {
+	NoBackgroundImageUrl string   `json:"noBackgroundImageUrl" bson:"noBackgroundImageUrl"`
+	StockImageUrls       []string `json:"stockImageUrls" bson:"stockImageUrls"`
 }
 
 type Composition struct {
 	Part     string
 	Material string
 	Percent  string
+}
+
+type Data struct {
+	Name        string        `json:"name" bson:"name"`
+	Color       string        `json:"color" bson:"color"`
+	Sizes       []string      `json:"sizes" bson:"sizes"`
+	Description string        `json:"description" bson:"description"`
+	Article     string        `json:"article" bson:"article"`
+	Sex         string        `json:"sex" bson:"sex"`
+	Category    string        `json:"category" bson:"category"`
+	Composition []Composition `json:"composition" bson:"composition"`
+	Price       Price         `json:"price" bson:"price"`
+	Images      Images        `json:"images" bson:"images"`
+}
+
+type Product struct {
+	MetaInformation MetaInformation `json:"metaInformation" bson:"metaInformation"`
+	Data            Data            `json:"data" bson:"data"`
 }
 
 type ProductRep struct {
