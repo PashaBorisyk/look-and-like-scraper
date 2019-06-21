@@ -1,4 +1,10 @@
 {
+  "kafkaConfig": {
+    "cGroup": "c_group_name",
+    "topic": "inserted_documents_ids",
+    "serverUrls": ["localhost:9092"],
+    "retryMax": 5
+  },
   "scraperConfig": {
     "locales": {
       "zara": [
@@ -24,8 +30,8 @@
     }
   },
   "mongoConfig": {
-    "uri": "",
+    "uri": "mongodb://look-and-like-test:unE8DZr3T7yA6SLDPjknaT8Bj0MzLD4O4604EDq0OE44Lv9BxAslwWXTqLvJFzvqLCBoCDshGgUUJuKoahpT6w==@look-and-like-test.documents.azure.com:10255/?ssl=true&replicaSet=globaldb",
     "productsDatabaseName": "look-and-like-test",
-    "collyDatabaseName" : "colly"
+    "collyDatabaseName": "colly"
   }
 }

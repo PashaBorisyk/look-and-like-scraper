@@ -6,6 +6,13 @@ import (
 	"log"
 )
 
+type KafkaConfig struct {
+	CGroup     string   `json:"cGroup"`
+	Topic      string   `json:"topic"`
+	ServerUrls []string `json:"serverUrls"`
+	RetryMax   int      `json:"retryMax"`
+}
+
 type MongoConfig struct {
 	Uri                  string `json:"uri"`
 	ProductsDatabaseName string `json:"productsDatabaseName"`
@@ -26,6 +33,7 @@ type ScraperConfig struct {
 }
 
 type Config struct {
+	KafkaConfig   KafkaConfig   `json:"kafkaConfig"`
 	ScraperConfig ScraperConfig `json:"scraperConfig"`
 	MongoConfig   MongoConfig   `json:"mongoConfig"`
 }

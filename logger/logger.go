@@ -16,14 +16,13 @@ func Init() {
 
 func configureLogger() {
 
-	fileName := getFileName()
-	file := getFile(fileName)
+	file := GetOrCreateFile("app")
 	fmt.Println("Setting output to " + file.Name())
 	mw := io.MultiWriter(os.Stdout, file)
 	log.SetOutput(mw)
 }
 
-func getFileName() string {
+func createFileName(suffix string) string {
 
 	now := time.Now()
 	month := now.Month().String()
@@ -31,10 +30,12 @@ func getFileName() string {
 	dayOfWeek := now.Weekday().String()
 
 	fileName := dayOfWeek + "(" + day + " " + month + ").log"
-	return "./logs/" + fileName
+	return "./logs/" + suffix + "-" + fileName
 }
 
-func getFile(fileName string) (file *os.File) {
+func GetOrCreateFile(suffix string) (file *os.File) {
+
+	fileName := createFileName(suffix)
 
 	_, err := os.Stat(fileName)
 	if err != nil && os.IsNotExist(err) {

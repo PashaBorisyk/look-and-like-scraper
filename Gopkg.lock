@@ -10,6 +10,14 @@
   version = "v1.5.0"
 
 [[projects]]
+  digest = "1:39e1e3f68b16a49fb9a9d5ccb29fa8ecdfc0866195525d279da634601d7c0f04"
+  name = "github.com/Shopify/sarama"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "4ba9bba6adb6697bcec3841e1ecdfecf5227c3b9"
+  version = "v1.8.0"
+
+[[projects]]
   digest = "1:66b3310cf22cdc96c35ef84ede4f7b9b370971c4025f394c89a2638729653b11"
   name = "github.com/andybalholm/cascadia"
   packages = ["."]
@@ -40,6 +48,22 @@
   packages = ["."]
   pruneopts = "UT"
   revision = "ce1d48779e67a1ddfb380995fe532b2e0015919c"
+
+[[projects]]
+  digest = "1:1f0c7ab489b407a7f8f9ad16c25a504d28ab461517a971d341388a56156c1bd7"
+  name = "github.com/eapache/go-resiliency"
+  packages = ["breaker"]
+  pruneopts = "UT"
+  revision = "5efd2ed019fd331ec2defc6f3bd98882f1e3e636"
+  version = "v1.2.0"
+
+[[projects]]
+  digest = "1:444b82bfe35c83bbcaf84e310fb81a1f9ece03edfed586483c869e2c046aef69"
+  name = "github.com/eapache/queue"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "44cc805cf13205b55f69e14bcb69867d1ae92f98"
+  version = "v1.1.0"
 
 [[projects]]
   digest = "1:586ea76dbd0374d6fb649a91d70d652b7fe0ccffb8910a77468e7702e7901f3d"
@@ -103,12 +127,31 @@
   version = "v1.2.4"
 
 [[projects]]
+  digest = "1:415d18e3139afe2921cc6b8a7c26acc77df657402e5e031548952ea219726eae"
+  name = "github.com/klauspost/crc32"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "bab58d77464aa9cf4e84200c3276da0831fe0c03"
+  version = "v1.2.0"
+
+[[projects]]
   branch = "master"
   digest = "1:3f1b8d663af8f47492310caf9e68496337694a78c440cacfa93838fb39ba2a28"
   name = "github.com/mantyr/pricer"
   packages = ["."]
   pruneopts = "UT"
   revision = "bdd2256d81ed54e5e1fb1bce7e6751df2e409fd9"
+
+[[projects]]
+  digest = "1:259f9b7645983a7a823318d78aa96dec68af8891f706493ac1ec04d819cb977c"
+  name = "github.com/pierrec/lz4"
+  packages = [
+    ".",
+    "internal/xxh32",
+  ]
+  pruneopts = "UT"
+  revision = "d705d4371bfccdf47f10e45584e896026c83616f"
+  version = "v2.2.3"
 
 [[projects]]
   branch = "master"
@@ -120,11 +163,35 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:4d92d3bcd412de705100c10f0428a0b63b12f3d12455ebae46e9ea384c23b333"
+  name = "github.com/samuel/go-zookeeper"
+  packages = ["zk"]
+  pruneopts = "UT"
+  revision = "c4fab1ac1bec58281ad0667dc3f0907a9476ac47"
+
+[[projects]]
+  branch = "master"
   digest = "1:11cdcddc4e9072d0698be2a2b58b183654e1399d9c475987427ed0cb4f6f0039"
   name = "github.com/temoto/robotstxt"
   packages = ["."]
   pruneopts = "UT"
   revision = "97ee4a9ee6ea01ed0bbf0325dd789f74cac6cb94"
+
+[[projects]]
+  branch = "master"
+  digest = "1:a23f411da857489f7309bba29f483d7c4b61b505c21ce59f4d9e5b80faccff06"
+  name = "github.com/wvanbergen/kafka"
+  packages = ["consumergroup"]
+  pruneopts = "UT"
+  revision = "e2edea948ddfee841ea9a263b32ccca15f7d6c2f"
+
+[[projects]]
+  branch = "master"
+  digest = "1:dbc1b70d7841d3dded4615acd5a369945d784c092209c6ed4eddc1839fb2e301"
+  name = "github.com/wvanbergen/kazoo-go"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "f72d8611297a7cf105da904c04198ad701a60101"
 
 [[projects]]
   branch = "master"
@@ -199,13 +266,15 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:71a3e45347f39ad3b05480f73358ffbd1f842be417ecc37922776a6173972e0f"
+  digest = "1:9c9e81eccb4afb764f429c7075cc7cccc47b83603cb18984a5de9275c679a831"
   name = "golang.org/x/net"
   packages = [
     "context",
     "html",
     "html/atom",
     "html/charset",
+    "internal/socks",
+    "proxy",
   ]
   pruneopts = "UT"
   revision = "60506f45cf65977eb3a9c6e30f995f54a721c271"
@@ -269,8 +338,11 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/PuerkitoBio/goquery",
+    "github.com/Shopify/sarama",
     "github.com/gocolly/colly",
     "github.com/mantyr/pricer",
+    "github.com/wvanbergen/kafka/consumergroup",
     "github.com/zolamk/colly-mongo-storage/colly/mongo",
     "go.mongodb.org/mongo-driver/mongo",
     "go.mongodb.org/mongo-driver/mongo/options",

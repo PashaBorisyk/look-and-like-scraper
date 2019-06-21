@@ -1,0 +1,68 @@
+package queue
+
+import (
+	"fmt"
+	"github.com/Shopify/sarama"
+	"log"
+	"look-and-like-web-scrapper/config"
+	"look-and-like-web-scrapper/logger"
+)
+
+var producer *sarama.SyncProducer
+
+func init() {
+	log.Println("Kafka init...")
+
+	var err error
+	producer, err = initProducer()
+	if err != nil {
+		log.Println("Error producer: ",err)
+		log.Println("Kafka init failed. You will have to run scissors separately")
+	} else {
+		log.Println("Kafka init done")
+	}
+
+}
+
+func initProducer() (*sarama.SyncProducer, error) {
+
+	log.Println("Init producer")
+
+	kafkaSettings := config.GetConfig().KafkaConfig
+	serverUrls := kafkaSettings.ServerUrls
+	retryMax := kafkaSettings.RetryMax
+
+	sarama.Logger = log.New(logger.GetOrCreateFile("kafka"), "kafka", log.Ltime)
+	saramaConfig := sarama.NewConfig()
+	saramaConfig.Producer.Retry.Max = retryMax
+	saramaConfig.Producer.RequiredAcks = sarama.WaitForAll
+	saramaConfig.Producer.Return.Successes = true
+
+	prd, err := sarama.NewSyncProducer(serverUrls, saramaConfig)
+
+	log.Println("Producer init done")
+
+	return &prd, err
+
+}
+
+func PublishKey(key interface{})  {
+	value := fmt.Sprintf("%v", key)
+	publish(value,*producer)
+}
+
+func publish(message string, producer sarama.SyncProducer) {
+	msg := &sarama.ProducerMessage{
+		Topic: config.GetConfig().KafkaConfig.Topic,
+		Value: sarama.StringEncoder(message),
+	}
+
+	p, o, err := producer.SendMessage(msg)
+	if err != nil {
+		fmt.Println("Error publish: ", err.Error())
+	}
+
+	log.Println("Partition: ", p)
+	log.Println("Offset: ", o)
+
+}

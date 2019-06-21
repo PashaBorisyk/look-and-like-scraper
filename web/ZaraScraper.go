@@ -8,6 +8,7 @@ import (
 	"look-and-like-web-scrapper/config"
 	"look-and-like-web-scrapper/db"
 	"look-and-like-web-scrapper/models"
+	"look-and-like-web-scrapper/queue"
 	"strconv"
 	"strings"
 	"time"
@@ -108,11 +109,12 @@ func (scraper *ZaraScraper) configureProductPageCollector() {
 	scraper.productPageCollector.OnHTML("section.content-main[id=main]", func(element *colly.HTMLElement) {
 
 		product := scraper.createProduct(element)
-		err := productsCollection.Insert(product)
+		insertedKey, err := productsCollection.Insert(product)
 		if err != nil {
 			log.Println("Error while inserting Zara product in database: ", err)
 		} else {
-			log.Println("Zara product with url:' ", product.MetaInformation.Url, "' inserted")
+			log.Println("Zara product with url:' ", product.MetaInformation.Url, "' inserted; Publishing key")
+			queue.PublishKey(insertedKey)
 		}
 
 	})
@@ -145,25 +147,24 @@ func (scraper *ZaraScraper) createProduct(element *colly.HTMLElement) *models.Pr
 	}
 
 	images := models.Images{
-		StockImageUrls:productImages,
+		StockImageUrls: productImages,
 	}
 
 	data := models.Data{
-		Images: images,
-		Price:price,
-		Sex:scraper.Sex,
-		Category:scraper.Category,
-		Color:productColor,
-		Name:productName,
-		Article:productArticle,
-		Sizes:productSizes,
-		Description:normalizeString(productDescription),
-
+		Images:      images,
+		Price:       price,
+		Sex:         scraper.Sex,
+		Category:    scraper.Category,
+		Color:       productColor,
+		Name:        productName,
+		Article:     productArticle,
+		Sizes:       productSizes,
+		Description: normalizeString(productDescription),
 	}
 
 	return &models.Product{
-		Data:data,
-		MetaInformation:metaInformation,
+		Data:            data,
+		MetaInformation: metaInformation,
 	}
 }
 

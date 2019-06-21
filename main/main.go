@@ -4,6 +4,7 @@ import (
 	"log"
 	"look-and-like-web-scrapper/logger"
 	"look-and-like-web-scrapper/web"
+	"sync"
 	"time"
 )
 
@@ -34,15 +35,27 @@ func startScrapping() {
 
 	start := time.Now()
 
-	hmScraper.Scrap()
-	hmTime := time.Since(start)
-	log.Println("HM scrap took: ", hmTime.Seconds(), " seconds")
+	wg := sync.WaitGroup{}
 
-	zaraStart := time.Now()
-	zaraScraper.Scrap()
-	zaraTime := time.Since(zaraStart)
-	log.Println("Zara scrap took: ", zaraTime.Seconds(), " seconds")
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		hmScraper.Scrap()
+		hmTime := time.Since(start)
+		log.Println("HM scrap took: ", hmTime.Seconds(), " seconds")
+	}()
 
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		zaraStart := time.Now()
+		zaraScraper.Scrap()
+		zaraTime := time.Since(zaraStart)
+		log.Println("Zara scrap took: ", zaraTime.Seconds(), " seconds")
+
+	}()
+
+	wg.Wait()
 	programTime := time.Since(start)
 	log.Println("Full scrap took: ", programTime, " seconds")
 }

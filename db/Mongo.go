@@ -45,13 +45,14 @@ func GetCollection(name string) *Collection {
 	return collectionsMap[name]
 }
 
-func (holder *Collection) Insert(docs ...interface{}) error {
+func (holder *Collection) Insert(doc interface{}) (interface{}, error) {
 	ctx := createContext()
-	_, err := holder.collection.InsertMany(ctx, docs)
+	result, err := holder.collection.InsertOne(ctx, doc)
 	if err != nil {
 		log.Println("Error inserting document: ", err)
+		return nil, err
 	}
-	return err
+	return result.InsertedID, err
 }
 
 func decodeMultipleResult(cursor *mongo.Cursor, foreach func(product models.Product, err error) error) error {

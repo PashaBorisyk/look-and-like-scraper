@@ -9,6 +9,7 @@ import (
 	"look-and-like-web-scrapper/config"
 	"look-and-like-web-scrapper/db"
 	"look-and-like-web-scrapper/models"
+	"look-and-like-web-scrapper/queue"
 	"regexp"
 	"strings"
 	"time"
@@ -135,11 +136,12 @@ func (scraper *HMScraper) configureProductPageCollector() {
 
 	scraper.productPageCollector.OnHTML("div.module.product-description.sticky-wrapper", func(element *colly.HTMLElement) {
 		product := scraper.createProduct(element)
-		err := productsCollection.Insert(product)
+		insertedKey , err := productsCollection.Insert(product)
 		if err != nil {
 			log.Println("Error inserting H&M product in database: ", err)
 		} else {
-			log.Println("H&M product with url:' ", product.MetaInformation.Url, "' inserted")
+			log.Println("H&M product with url:' ", product.MetaInformation.Url, "' inserted; Publishing key..")
+			queue.PublishKey(insertedKey)
 		}
 	})
 
