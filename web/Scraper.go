@@ -6,11 +6,10 @@ import (
 	"look-and-like-web-scrapper/config"
 	"look-and-like-web-scrapper/models"
 	"strings"
+	"time"
 )
 
 const UserAgent = "look-and-like-scrapper"
-
-var storage *mongo.Storage
 
 type Scraper struct {
 	Locales       []config.Locale
@@ -18,6 +17,9 @@ type Scraper struct {
 	Category      string
 	Sex           string
 }
+
+var scrappingTime = time.Now().Format(time.RFC3339)
+var storage *mongo.Storage
 
 func init() {
 	configureStorage()

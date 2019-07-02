@@ -11,7 +11,6 @@ import (
 	"look-and-like-web-scrapper/queue"
 	"strconv"
 	"strings"
-	"time"
 )
 
 const zaraDomain = "www.zara.com"
@@ -109,7 +108,7 @@ func (scraper *ZaraScraper) configureProductPageCollector() {
 	scraper.productPageCollector.OnHTML("section.content-main[id=main]", func(element *colly.HTMLElement) {
 
 		product := scraper.createProduct(element)
-		insertedKey, err := productsCollection.Insert(product)
+		insertedKey, err := productsCollection.Insert(*product)
 		if err != nil {
 			log.Println("Error while inserting Zara product in database: ", err)
 		} else {
@@ -133,7 +132,7 @@ func (scraper *ZaraScraper) createProduct(element *colly.HTMLElement) *models.Pr
 
 	metaInformation := models.MetaInformation{
 		Url:        productUrl,
-		InsertDate: time.Now(),
+		InsertDate: scrappingTime,
 		ShopName:   zaraShopName,
 		BaseURL:    scraper.CurrentLocale.BaseURL,
 		Alpha3Code: scraper.CurrentLocale.Alpha3Code,

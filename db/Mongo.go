@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
@@ -46,8 +47,13 @@ func GetCollection(name string) *Collection {
 }
 
 func (holder *Collection) Insert(doc interface{}) (interface{}, error) {
+	switch object := doc.(type) {
+	case models.Product:
+		object.ID = primitive.NewObjectID()
+		doc = object
+	}
 	ctx := createContext()
-	result, err := holder.collection.InsertOne(ctx, doc)
+	result, err := holder.collection.InsertOne(ctx,doc)
 	if err != nil {
 		log.Println("Error inserting document: ", err)
 		return nil, err

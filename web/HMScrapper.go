@@ -136,7 +136,7 @@ func (scraper *HMScraper) configureProductPageCollector() {
 
 	scraper.productPageCollector.OnHTML("div.module.product-description.sticky-wrapper", func(element *colly.HTMLElement) {
 		product := scraper.createProduct(element)
-		insertedKey , err := productsCollection.Insert(product)
+		insertedKey , err := productsCollection.Insert(*product)
 		if err != nil {
 			log.Println("Error inserting H&M product in database: ", err)
 		} else {
@@ -160,7 +160,7 @@ func (scraper *HMScraper) createProduct(element *colly.HTMLElement) *models.Prod
 
 	metaInformation := models.MetaInformation{
 		Url:        productUrl,
-		InsertDate: time.Now(),
+		InsertDate: scrappingTime,
 		ShopName:   hmShopName,
 		BaseURL:    scraper.CurrentLocale.BaseURL,
 		Alpha3Code: scraper.CurrentLocale.Alpha3Code,

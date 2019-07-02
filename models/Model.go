@@ -1,17 +1,13 @@
 package models
 
-import (
-	"time"
-)
-
 type MetaInformation struct {
-	Domain     string    `json:"domain" bson:"domain"`
-	LocaleLCID string    `json:"localeLCID" bson:"localeLCID"`
-	Alpha3Code string    `json:"alpha3Code" bson:"alpha3Code"`
-	ShopName   string    `json:"shopName" bson:"shopName"`
-	BaseURL    string    `json:"baseURL" bson:"baseURL"`
-	Url        string    `json:"url" bson:"url"`
-	InsertDate time.Time `json:"insertDate" bson:"insertDate"`
+	Domain     string `json:"domain" bson:"domain"`
+	LocaleLCID string `json:"localeLCID" bson:"localeLCID"`
+	Alpha3Code string `json:"alpha3Code" bson:"alpha3Code"`
+	ShopName   string `json:"shopName" bson:"shopName"`
+	BaseURL    string `json:"baseURL" bson:"baseURL"`
+	Url        string `json:"url" bson:"url"`
+	InsertDate string `json:"insertDate" bson:"insertDate"`
 }
 
 type Price struct {
@@ -25,9 +21,9 @@ type Images struct {
 }
 
 type Composition struct {
-	Part     string
-	Material string
-	Percent  string
+	Part     string `json:"part"`
+	Material string `json:"material"`
+	Percent  string `json:"percent"`
 }
 
 type Data struct {
@@ -44,6 +40,7 @@ type Data struct {
 }
 
 type Product struct {
+	ID              interface{}     `json:"id" bson:"_id"`
 	MetaInformation MetaInformation `json:"metaInformation" bson:"metaInformation"`
 	Data            Data            `json:"data" bson:"data"`
 }

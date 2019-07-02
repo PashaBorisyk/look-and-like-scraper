@@ -40,8 +40,6 @@ func initProducer() (*sarama.SyncProducer, error) {
 
 	prd, err := sarama.NewSyncProducer(serverUrls, saramaConfig)
 
-	log.Println("Producer init done")
-
 	return &prd, err
 
 }
@@ -57,12 +55,11 @@ func publish(message string, producer sarama.SyncProducer) {
 		Value: sarama.StringEncoder(message),
 	}
 
-	p, o, err := producer.SendMessage(msg)
+	_, _, err := producer.SendMessage(msg)
 	if err != nil {
 		fmt.Println("Error publish: ", err.Error())
 	}
 
-	log.Println("Partition: ", p)
-	log.Println("Offset: ", o)
+	log.Println("Message ",message, " published")
 
 }
