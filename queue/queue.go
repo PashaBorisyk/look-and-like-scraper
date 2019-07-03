@@ -11,17 +11,20 @@ import (
 var producer *sarama.SyncProducer
 
 func init() {
+	configureKafka()
+}
+
+func configureKafka(){
 	log.Println("Kafka init...")
 
 	var err error
 	producer, err = initProducer()
 	if err != nil {
-		log.Println("Error producer: ",err)
+		log.Println("Error producer: ", err)
 		log.Println("Kafka init failed. You will have to run scissors separately")
 	} else {
 		log.Println("Kafka init done")
 	}
-
 }
 
 func initProducer() (*sarama.SyncProducer, error) {
@@ -32,7 +35,7 @@ func initProducer() (*sarama.SyncProducer, error) {
 	serverUrls := kafkaSettings.ServerUrls
 	retryMax := kafkaSettings.RetryMax
 
-	sarama.Logger = log.New(logger.GetOrCreateFile("kafka"), "kafka", log.Ltime)
+	sarama.Logger = log.New(logger.GetOrCreateLogFile("kafka"), "kafka", log.Ltime)
 	saramaConfig := sarama.NewConfig()
 	saramaConfig.Producer.Retry.Max = retryMax
 	saramaConfig.Producer.RequiredAcks = sarama.WaitForAll
@@ -44,9 +47,9 @@ func initProducer() (*sarama.SyncProducer, error) {
 
 }
 
-func PublishKey(key interface{})  {
+func PublishKey(key interface{}) {
 	value := fmt.Sprintf("%v", key)
-	publish(value,*producer)
+	publish(value, *producer)
 }
 
 func publish(message string, producer sarama.SyncProducer) {
@@ -55,11 +58,16 @@ func publish(message string, producer sarama.SyncProducer) {
 		Value: sarama.StringEncoder(message),
 	}
 
-	_, _, err := producer.SendMessage(msg)
-	if err != nil {
-		fmt.Println("Error publish: ", err.Error())
-	}
+	if producer != nil {
+		_, _, err := producer.SendMessage(msg)
+		if err != nil {
+			fmt.Println("Error publish: ", err.Error())
+		}
 
-	log.Println("Message ",message, " published")
+		log.Println("Message ", message, " published")
+	} else {
+		log.Println("No active queue connection. No message will be published; Reconnecting...")
+		configureKafka()
+	}
 
 }

@@ -16,7 +16,7 @@ func Init() {
 
 func configureLogger() {
 
-	file := GetOrCreateFile("app")
+	file := GetOrCreateLogFile("app")
 	fmt.Println("Setting output to " + file.Name())
 	mw := io.MultiWriter(os.Stdout, file)
 	log.SetOutput(mw)
@@ -33,11 +33,16 @@ func createFileName(suffix string) string {
 	return "./logs/" + suffix + "-" + fileName
 }
 
-func GetOrCreateFile(suffix string) (file *os.File) {
+func GetOrCreateLogFile(suffix string) (file *os.File) {
 
+	err := os.MkdirAll("./logs/", os.ModePerm)
+	if err != nil {
+		log.Println("Error creating logs directory: ",err)
+		return nil
+	}
 	fileName := createFileName(suffix)
 
-	_, err := os.Stat(fileName)
+	_, err = os.Stat(fileName)
 	if err != nil && os.IsNotExist(err) {
 		fmt.Println("No file found for today. Creating new one")
 		file, err = os.Create(fileName)
