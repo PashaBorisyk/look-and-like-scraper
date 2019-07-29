@@ -2,7 +2,6 @@
   "kafkaConfig": {
     "cGroup": "c_group_name",
     "topic": "inserted_documents_ids",
-    "serverUrls": ["localhost:9092"],
     "retryMax": 5
   },
   "scraperConfig": {

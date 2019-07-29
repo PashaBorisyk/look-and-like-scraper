@@ -9,7 +9,6 @@ import (
 type KafkaConfig struct {
 	CGroup     string   `json:"cGroup"`
 	Topic      string   `json:"topic"`
-	ServerUrls []string `json:"serverUrls"`
 	RetryMax   int      `json:"retryMax"`
 }
 

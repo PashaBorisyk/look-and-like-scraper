@@ -6,6 +6,7 @@ import (
 	"log"
 	"look-and-like-web-scrapper/config"
 	"look-and-like-web-scrapper/logger"
+	"os"
 )
 
 var producer *sarama.SyncProducer
@@ -32,7 +33,11 @@ func initProducer() (*sarama.SyncProducer, error) {
 	log.Println("Init producer")
 
 	kafkaSettings := config.GetConfig().KafkaConfig
-	serverUrls := kafkaSettings.ServerUrls
+	serverUrl := os.Getenv("KAFKA_SERVER_URL")
+	if serverUrl == "" {
+		panic("KAFKA_SERVER_URL environment variable must be provided")
+	}
+	serverUrls := []string{serverUrl}
 	retryMax := kafkaSettings.RetryMax
 
 	sarama.Logger = log.New(logger.GetOrCreateLogFile("kafka"), "kafka", log.Ltime)
