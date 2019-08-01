@@ -143,17 +143,6 @@
   revision = "bdd2256d81ed54e5e1fb1bce7e6751df2e409fd9"
 
 [[projects]]
-  digest = "1:259f9b7645983a7a823318d78aa96dec68af8891f706493ac1ec04d819cb977c"
-  name = "github.com/pierrec/lz4"
-  packages = [
-    ".",
-    "internal/xxh32",
-  ]
-  pruneopts = "UT"
-  revision = "d705d4371bfccdf47f10e45584e896026c83616f"
-  version = "v2.2.3"
-
-[[projects]]
   branch = "master"
   digest = "1:374ce4704830a7b9729d8798bcb4ac796f9c7bbb6903950ec55b71332caffe31"
   name = "github.com/saintfish/chardet"
@@ -163,35 +152,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:4d92d3bcd412de705100c10f0428a0b63b12f3d12455ebae46e9ea384c23b333"
-  name = "github.com/samuel/go-zookeeper"
-  packages = ["zk"]
-  pruneopts = "UT"
-  revision = "c4fab1ac1bec58281ad0667dc3f0907a9476ac47"
-
-[[projects]]
-  branch = "master"
   digest = "1:11cdcddc4e9072d0698be2a2b58b183654e1399d9c475987427ed0cb4f6f0039"
   name = "github.com/temoto/robotstxt"
   packages = ["."]
   pruneopts = "UT"
   revision = "97ee4a9ee6ea01ed0bbf0325dd789f74cac6cb94"
-
-[[projects]]
-  branch = "master"
-  digest = "1:a23f411da857489f7309bba29f483d7c4b61b505c21ce59f4d9e5b80faccff06"
-  name = "github.com/wvanbergen/kafka"
-  packages = ["consumergroup"]
-  pruneopts = "UT"
-  revision = "e2edea948ddfee841ea9a263b32ccca15f7d6c2f"
-
-[[projects]]
-  branch = "master"
-  digest = "1:dbc1b70d7841d3dded4615acd5a369945d784c092209c6ed4eddc1839fb2e301"
-  name = "github.com/wvanbergen/kazoo-go"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "f72d8611297a7cf105da904c04198ad701a60101"
 
 [[projects]]
   branch = "master"
@@ -266,15 +231,13 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:9c9e81eccb4afb764f429c7075cc7cccc47b83603cb18984a5de9275c679a831"
+  digest = "1:71a3e45347f39ad3b05480f73358ffbd1f842be417ecc37922776a6173972e0f"
   name = "golang.org/x/net"
   packages = [
     "context",
     "html",
     "html/atom",
     "html/charset",
-    "internal/socks",
-    "proxy",
   ]
   pruneopts = "UT"
   revision = "60506f45cf65977eb3a9c6e30f995f54a721c271"
@@ -342,8 +305,8 @@
     "github.com/Shopify/sarama",
     "github.com/gocolly/colly",
     "github.com/mantyr/pricer",
-    "github.com/wvanbergen/kafka/consumergroup",
     "github.com/zolamk/colly-mongo-storage/colly/mongo",
+    "go.mongodb.org/mongo-driver/bson/primitive",
     "go.mongodb.org/mongo-driver/mongo",
     "go.mongodb.org/mongo-driver/mongo/options",
   ]

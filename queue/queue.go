@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/Shopify/sarama"
 	"log"
-	"look-and-like-web-scrapper/config"
-	"look-and-like-web-scrapper/logger"
+	"look-and-like-scraper/config"
+	"look-and-like-scraper/logger"
 	"os"
 )
 

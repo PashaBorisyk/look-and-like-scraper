@@ -3,8 +3,8 @@ package web
 import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/zolamk/colly-mongo-storage/colly/mongo"
-	"look-and-like-web-scrapper/config"
-	"look-and-like-web-scrapper/models"
+	"look-and-like-scraper/config"
+	"look-and-like-scraper/models"
 	"strings"
 	"time"
 )

@@ -2,8 +2,8 @@ package main
 
 import (
 	"log"
-	"look-and-like-web-scrapper/logger"
-	"look-and-like-web-scrapper/web"
+	"look-and-like-scraper/logger"
+	"look-and-like-scraper/web"
 	"sync"
 	"time"
 )
