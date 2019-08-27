@@ -7,6 +7,7 @@ import (
 	"look-and-like-scraper/config"
 	"look-and-like-scraper/logger"
 	"os"
+	"time"
 )
 
 var producer *sarama.SyncProducer
@@ -45,6 +46,7 @@ func initProducer() (*sarama.SyncProducer, error) {
 	saramaConfig.Producer.Retry.Max = retryMax
 	saramaConfig.Producer.RequiredAcks = sarama.WaitForAll
 	saramaConfig.Producer.Return.Successes = true
+	saramaConfig.Metadata.Retry.Backoff = 2 *time.Second
 
 	prd, err := sarama.NewSyncProducer(serverUrls, saramaConfig)
 

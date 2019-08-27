@@ -17,7 +17,7 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 
 WORKDIR /root/
-
+    
 COPY --from=builder /go/bin/look-and-like-scraper .
 
 COPY ./resources ./resources
